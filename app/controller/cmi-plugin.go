@@ -26,7 +26,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gardener/machine-controller-manager-provider-sampleprovider/pkg/sampleprovider"
+	"github.com/gardener/machine-controller-manager-provider-alicloud/pkg/alicloud"
 	"github.com/spf13/cobra"
 )
 
@@ -64,6 +64,6 @@ func main() {
 }
 
 func handle() {
-	d := sampleprovider.NewPlugin(endpoint)
+	d := alicloud.NewPlugin(endpoint)
 	d.Run()
 }

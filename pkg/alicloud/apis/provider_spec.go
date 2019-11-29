@@ -14,9 +14,9 @@ limitations under the License.
 
 package api
 
-// SampleProviderProviderSpec contains the fields of
+// alicloudProviderSpec contains the fields of
 // provider spec that the plugin expects
-type SampleProviderProviderSpec struct {
+type alicloudProviderSpec struct {
 	// APIVersion mentions the APIVersion of the object being passed
 	APIVersion string
 

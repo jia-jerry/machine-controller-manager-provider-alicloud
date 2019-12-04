@@ -12,5 +12,7 @@
 *amd64
 *.html
 
+cmi-plugin
+
 # Output of the go coverage tool
 *coverprofile.out*

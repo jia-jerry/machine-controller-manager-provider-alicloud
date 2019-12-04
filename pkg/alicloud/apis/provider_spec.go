@@ -14,28 +14,41 @@ limitations under the License.
 
 package api
 
-// alicloudProviderSpec contains the fields of
-// provider spec that the plugin expects
-type alicloudProviderSpec struct {
+// AlicloudProviderSpec contains the fields of provider spec that the plugin expects
+type AlicloudProviderSpec struct {
 	// APIVersion mentions the APIVersion of the object being passed
 	APIVersion string
 
-	// TODO: Add the raw extension struct expected while recieving machine operating requests
-	// Some dummy examples are mentioned below
+	ImageID                 string              `json:"imageID"`
+	InstanceType            string              `json:"instanceType"`
+	Region                  string              `json:"region"`
+	ZoneID                  string              `json:"zoneID,omitempty"`
+	SecurityGroupID         string              `json:"securityGroupID,omitempty"`
+	VSwitchID               string              `json:"vSwitchID"`
+	PrivateIPAddress        string              `json:"privateIPAddress,omitempty"`
+	SystemDisk              *AlicloudSystemDisk `json:"systemDisk,omitempty"`
+	InstanceChargeType      string              `json:"instanceChargeType,omitempty"`
+	InternetChargeType      string              `json:"internetChargeType,omitempty"`
+	InternetMaxBandwidthIn  *int                `json:"internetMaxBandwidthIn,omitempty"`
+	InternetMaxBandwidthOut *int                `json:"internetMaxBandwidthOut,omitempty"`
+	SpotStrategy            string              `json:"spotStrategy,omitempty"`
+	IoOptimized             string              `json:"IoOptimized,omitempty"`
+	Tags                    map[string]string   `json:"tags,omitempty"`
+	KeyPairName             string              `json:"keyPairName"`
+}
 
-	// MachineImageName contains the image name from which machine is to be spawned
-	MachineImageName string
-	// MachineType constains the type of machine to be spawned
-	MachineType string
-	// Tags to be placed on the VM
-	Tags map[string]string `json:"tags,omitempty"`
+// AlicloudSystemDisk describes SystemDisk for Alicloud.
+type AlicloudSystemDisk struct {
+	Category string `json:"category"`
+	Size     int    `json:"size"`
 }
 
 // Secrets stores the cloud-provider specific sensitive-information.
-// +Optional secrets to be passed while performing machine operations on the cloud provider
 type Secrets struct {
-	// cloud config file (base64 encoded)
+	// AliCloud access key id (base64 encoded)
+	AlicloudAccessKeyID string `json:"alicloudAccessKeyID,omitempty"`
+	// AliCloud access key secret(base64 encoded)
+	AlicloudAccessKeySecret string `json:"alicloudAccessKeySecret,omitempty"`
+	// AliCloud cloud config file (base64 encoded)
 	UserData string `json:"userData,omitempty"`
-	// CloudCredentials (base64 encoded)
-	CloudCredentials string `json:"cloudCredentials,omitempty"`
 }

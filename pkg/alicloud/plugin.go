@@ -22,13 +22,14 @@ Modifications Copyright (c) 2019 SAP SE or an SAP affiliate company. All rights 
 package alicloud
 
 import (
+	"errors"
+
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/ecs"
 	cmicommon "github.com/gardener/machine-controller-manager-provider-alicloud/pkg/cmicommon"
 	"github.com/golang/glog"
 )
 
-const pluginName = "cmi-plugin"
-
-var version = "0.1.0"
+const pluginName = "cmi-alicloud-plugin"
 
 // NewPlugin returns a newly created plugin object
 func NewPlugin(endpoint string) *Plugin {
@@ -60,11 +61,25 @@ func (p *Plugin) Run() {
 // You can optionally enhance this interface to add interface methods here
 // You can use it to mock cloud provider calls
 type PluginSPI interface {
+	CreateClient(region, accessKeyID, accessKeySecret string) (Client, error)
 }
 
 //pluginSPIImpl is the real implementation of PluginSPI interface
 // that makes the calls to the provider SDK
 type pluginSPIImpl struct{}
+
+func (spi *pluginSPIImpl) CreateClient(region, accessKeyID, accessKeySecret string) (Client, error) {
+	if accessKeyID == "" || accessKeySecret == "" || region == "" {
+		return nil, errors.New("AccessKeyID or AccessKeySecret or region can't be empty")
+	}
+
+	ecsClient, err := ecs.NewClientWithAccessKey(region, accessKeyID, accessKeySecret)
+	if err != nil {
+		return nil, err
+	}
+	
+	return &clientImpl{ecsClient}, nil
+}
 
 // MachinePlugin implements the cmi.MachineServer
 // It also implements the pluginSPI interface
